@@ -136,7 +136,9 @@ class BCQ(object):
 
 		env = gym.make("hopper-expert-v2")
 		data = env.get_dataset()
-
+		length=len(data['observations'])
+		start=0
+		end=batch_size
 		for it in range(iterations):
 			# Sample replay buffer / batch
 			
@@ -153,9 +155,21 @@ class BCQ(object):
             #     'next_states': data['next_observations'],
             #     'terminations': data['terminals'],
             #
-
+			
 			device = "cuda" if torch.cuda.is_available() else "cpu"
-			state, action, next_state, reward, not_done = (torch.from_numpy(data['observations'][(batch_size*(it-1):batch_size*it)%len(data['observations'])]).to(device), torch.from_numpy(data['actions'][(batch_size*(it-1):batch_size*it)%len(data['observations'])]).to(device), torch.from_numpy(data['next_observations'][(batch_size*(it-1):batch_size*it)%len(data['observations'])]).to(device), torch.from_numpy(data['rewards'][(batch_size*(it-1):batch_size*it)%len(data['observations'])]).to(device), torch.from_numpy(data['terminals'][(batch_size*(it-1):batch_size*it)%len(data['observations'])]).to(device))
+			start=start+batch_size
+			end=end+batch_size
+			if end>length:
+				np.apply_along-axis(np.random.shuffle, axis=1, arr=data)
+			state, action, next_state, reward, not_done = (
+			torch.from_numpy(data['observations'][start:end]).to(device), 
+			torch.from_numpy(data['actions'][start:end]).to(device), 
+			torch.from_numpy(data['next_observations'][start:end]).to(device), 
+			torch.from_numpy(data['rewards'][start:end]).to(device), 
+			torch.from_numpy(data['terminals'][start:end]).to(device)
+			)
+
+			
 
 			# Variational Auto-Encoder Training
 			recon, mean, std = self.vae(state, action)
