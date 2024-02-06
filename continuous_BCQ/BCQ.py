@@ -132,12 +132,13 @@ class BCQ(object):
 		return action[ind].cpu().data.numpy().flatten()
 
 
-	def train(self, replay_buffer, iterations, batch_size=4):
+	def train(self, replay_buffer, iterations, batch_size=100):
 
 		for it in range(iterations):
 			# Sample replay buffer / batch
 			env = gym.make("hopper-expert-v2")
 			data = env.get_dataset()
+			data = data.random_batch(batch_size)
             # env = env.unwrapped
         	# data = env.get_dataset()
             # testsets[name] = {
@@ -147,7 +148,7 @@ class BCQ(object):
             #     'next_states': data['next_observations'],
             #     'terminations': data['terminals'],
             #
-			
+
 			device = "cuda" if torch.cuda.is_available() else "cpu"
 			state, action, next_state, reward, not_done = (torch.from_numpy(data['observations']).to(device), torch.from_numpy(data['actions']).to(device), torch.from_numpy(data['next_observations']).to(device), torch.from_numpy(data['rewards']).to(device), torch.from_numpy(data['terminals']).to(device))
 
