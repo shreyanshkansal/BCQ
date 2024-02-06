@@ -147,8 +147,8 @@ class BCQ(object):
             #     'next_states': data['next_observations'],
             #     'terminations': data['terminals'],
             #
-			
-			state, action, next_state, reward, not_done = (data['observations'], data['actions'], data['next_observations'], data['rewards'], data['terminals'],)
+			device = "cuda" if torch.cuda.is_available() else "cpu"
+			state, action, next_state, reward, not_done = (data['observations'].ToTensor().to(device), data['actions'].ToTensor().to(device), data['next_observations'].ToTensor().to(device), data['rewards'].ToTensor().to(device), data['terminals'].ToTensor().to(device))
 
 			# Variational Auto-Encoder Training
 			recon, mean, std = self.vae(state, action)
