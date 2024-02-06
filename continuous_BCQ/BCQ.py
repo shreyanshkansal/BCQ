@@ -147,6 +147,7 @@ class BCQ(object):
             #     'next_states': data['next_observations'],
             #     'terminations': data['terminals'],
             #
+			
 			state, action, next_state, reward, not_done = (data['observations'], data['actions'], data['next_observations'], data['rewards'], data['terminals'],)
 
 			# Variational Auto-Encoder Training
