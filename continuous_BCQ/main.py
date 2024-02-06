@@ -101,7 +101,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	
 	print (replay_buffer)
 	
-	print (replay_buffer)
+	#print (replay_buffer)
 
 	evaluations = []
 	episode_num = 0
