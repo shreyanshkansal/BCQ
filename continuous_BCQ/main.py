@@ -3,6 +3,7 @@ import gym
 import numpy as np
 import os
 import torch
+import wandb
 
 import BCQ
 import DDPG
@@ -92,6 +93,9 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	setting = f"{args.env}_{args.seed}"
 	buffer_name = f"{args.buffer_name}_{setting}"
 
+	#wandb
+	wandb.login(key = "ab2b40ca778eb2262c7ad70b4887b9a82110f794")
+	run = wandb.init(project="BCQRuns")
 	# Initialize policy
 	policy = BCQ.BCQ(state_dim, action_dim, max_action, device, args.discount, args.tau, args.lmbda, args.phi)
 
@@ -101,7 +105,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	
 	print (replay_buffer.sample(10))
 	
-	
+
 	#print (replay_buffer)
 
 	evaluations = []
@@ -111,8 +115,9 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	
 	while training_iters < args.max_timesteps: 
 		pol_vals = policy.train(replay_buffer, iterations=int(args.eval_freq), batch_size=args.batch_size)
-
-		evaluations.append(eval_policy(policy, args.env, args.seed))
+		avg_reward = eval_policy(policy, args.env, args.seed)
+		evaluations.append(avg_reward)
+		run.log({"avg_reward" : avg_reward})
 		np.save(f"./results/BCQ_{setting}", evaluations)
 
 		training_iters += args.eval_freq

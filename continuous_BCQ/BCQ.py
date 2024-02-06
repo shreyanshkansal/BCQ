@@ -5,6 +5,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import d4rl
 import gym
+import wandb
+
+run.log({"Normalized_mean" : normalized_mean, "Normalized_median" : normalized_median, "Normalized_min" : normalized_min_, "Normalized_max" : normalized_max_, "train_mean" : train_mean, "train_median" : train_median, "train_min_" : train_min_, "train_max_" : train_max_, "test_mean": test_mean, "test_median" : test_median, "test_max_" : test_max_, "test_min_": test_min_,"steps" : elapsed_time})
 
 
 class Actor(nn.Module):
