@@ -132,7 +132,7 @@ class BCQ(object):
 		return action[ind].cpu().data.numpy().flatten()
 
 
-	def train(self, replay_buffer, iterations, batch_size=100):
+	def train(self, replay_buffer, iterations, batch_size=32):
 
 		for it in range(iterations):
 			# Sample replay buffer / batch
