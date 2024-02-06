@@ -163,7 +163,9 @@ class BCQ(object):
 			start=start+batch_size
 			end=end+batch_size
 			if end>length:
-				np.apply_along-axis(np.random.shuffle, axis=1, arr=data)
+				data=np.transpose(data)
+				np.random.shuffle(data)
+				data=np.transpose(data)
 			state, action, next_state, reward, not_done = (
 			torch.from_numpy(data['observations'][start:end]).to(device), 
 			torch.from_numpy(data['actions'][start:end]).to(device), 
