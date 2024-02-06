@@ -3,6 +3,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import d4rl
+import gym
 
 
 class Actor(nn.Module):
@@ -134,7 +136,18 @@ class BCQ(object):
 
 		for it in range(iterations):
 			# Sample replay buffer / batch
-			state, action, next_state, reward, not_done = replay_buffer.sample(batch_size)
+			env = gym.make("ant-expert-v2")
+			data = env.get_dataset()
+            # env = env.unwrapped
+        	# data = env.get_dataset()
+            # testsets[name] = {
+            #     'states': data['observations'],
+            #     'actions': data['actions'],
+            #     'rewards': data['rewards'],
+            #     'next_states': data['next_observations'],
+            #     'terminations': data['terminals'],
+            #
+			state, action, next_state, reward, not_done = (data['observations'], data['actions'], data['next_observations'], data['rewards'], data['terminals'],)
 
 			# Variational Auto-Encoder Training
 			recon, mean, std = self.vae(state, action)
