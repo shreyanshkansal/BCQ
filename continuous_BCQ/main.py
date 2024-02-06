@@ -99,7 +99,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	replay_buffer = utils.ReplayBuffer(state_dim, action_dim, device)
 	replay_buffer.load(f"./buffers/{buffer_name}")
 	
-	print (replay_buffer)
+	print (replay_buffer.sample(10))
 	
 	#print (replay_buffer)
 
