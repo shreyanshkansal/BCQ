@@ -198,4 +198,5 @@ if __name__ == "__main__":
 	if args.train_behavioral or args.generate_buffer:
 		interact_with_environment(env, state_dim, action_dim, max_action, device, args)
 	else:
+		print ("blah")
 		train_BCQ(state_dim, action_dim, max_action, device, args)
