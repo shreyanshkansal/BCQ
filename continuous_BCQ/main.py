@@ -101,6 +101,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	
 	print (replay_buffer.sample(10))
 	
+	
 	#print (replay_buffer)
 
 	evaluations = []
