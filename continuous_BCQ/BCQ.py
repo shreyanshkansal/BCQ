@@ -136,7 +136,7 @@ class BCQ(object):
 
 		for it in range(iterations):
 			# Sample replay buffer / batch
-			env = gym.make("ant-expert-v2")
+			env = gym.make("hopper-expert-v2")
 			data = env.get_dataset()
             # env = env.unwrapped
         	# data = env.get_dataset()
