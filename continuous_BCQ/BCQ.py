@@ -134,10 +134,12 @@ class BCQ(object):
 
 	def train(self, replay_buffer, iterations, batch_size=100):
 
+		env = gym.make("hopper-expert-v2")
+		data = env.get_dataset()
+		
 		for it in range(iterations):
 			# Sample replay buffer / batch
-			env = gym.make("hopper-expert-v2")
-			data = env.get_dataset()
+			
 
 			#this doesn't work
 			#data = data.random_batch(batch_size)
