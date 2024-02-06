@@ -100,10 +100,10 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	policy = BCQ.BCQ(state_dim, action_dim, max_action, device, args.discount, args.tau, args.lmbda, args.phi)
 
 	# Load buffer
-	replay_buffer = utils.ReplayBuffer(state_dim, action_dim, device)
+	# replay_buffer = utils.ReplayBuffer(state_dim, action_dim, device)
 	# replay_buffer.load(f"./buffers/{buffer_name}")
 	
-	print (replay_buffer.sample(10))
+	#print (replay_buffer.sample(10))
 	
 
 	#print (replay_buffer)
@@ -114,7 +114,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	training_iters = 0
 	
 	while training_iters < args.max_timesteps: 
-		pol_vals = policy.train(replay_buffer, iterations=int(args.eval_freq), batch_size=args.batch_size)
+		pol_vals = policy.train(0, iterations=int(args.eval_freq), batch_size=args.batch_size)
 		avg_reward = eval_policy(policy, args.env, args.seed)
 		evaluations.append(avg_reward)
 		run.log({"avg_reward" : avg_reward})
