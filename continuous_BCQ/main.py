@@ -124,7 +124,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 		training_iters += args.eval_freq
 		print(f"Training iterations: {training_iters}")
 
-		if training_iters%(args.max_timesteps//3) == 0:
+		if training_iters%(args.max_timesteps) == 0:
 			policy.actor.save(os.path.join(wandb.run.dir, f"actor_net_{save_count}.pkl"))
 			wandb.save(f"actor_net_{save_count}.pkl")
 			policy.critic.save(os.path.join(wandb.run.dir, f"critic_net_{save_count}.pkl"))
