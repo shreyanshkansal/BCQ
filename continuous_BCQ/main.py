@@ -112,6 +112,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	episode_num = 0
 	done = True 
 	training_iters = 0
+	save_count = 0
 	
 	while training_iters < args.max_timesteps: 
 		pol_vals = policy.train(0, iterations=int(args.eval_freq), batch_size=args.batch_size)
@@ -122,6 +123,13 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 
 		training_iters += args.eval_freq
 		print(f"Training iterations: {training_iters}")
+
+		if training_iters%(args.max_timesteps//5) == 0:
+			policy.actor.save(os.path.join(wandb.run.dir, f"actor_net_{save_count}.pkl"))
+			wandb.save(f"actor_net_{save_count}.pkl")
+			policy.critic.save(os.path.join(wandb.run.dir, f"critic_net_{save_count}.pkl"))
+			wandb.save(f"critic_net_{save_count}.pkl")
+			save_count += 1
 
 
 # Runs policy for X episodes and returns average reward
