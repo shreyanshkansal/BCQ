@@ -131,7 +131,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 			with open(path, "wb") as file: 
 				pickle.dump(policy.actor, file)
 			
-			artifact = wandb.Artifact('model', type='model')
+			artifact = wandb.Artifact('actor_model', type='model')
 			artifact.add_file(path)
 			run.log_artifact(artifact)
 
@@ -140,10 +140,10 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 				pickle.dump(policy.critic, file)
 			# policy.critic.save(os.path.join(wandb.run.dir, f"critic_net_{save_count}.pkl"))
 				
-			artifact = wandb.Artifact('model', type='model')
+			artifact = wandb.Artifact('critic_model', type='model')
 			artifact.add_file(path)
 			run.log_artifact(artifact)
-			
+
 			save_count += 1
 
 
