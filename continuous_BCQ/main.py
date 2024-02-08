@@ -4,7 +4,7 @@ import numpy as np
 import os
 import torch
 import wandb
-
+import pickle
 import BCQ
 import DDPG
 import utils
@@ -125,10 +125,25 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 		print(f"Training iterations: {training_iters}")
 
 		if training_iters%(args.max_timesteps) == 0:
-			policy.actor.save(os.path.join(wandb.run.dir, f"actor_net_{save_count}.pkl"))
-			wandb.save(f"actor_net_{save_count}.pkl")
-			policy.critic.save(os.path.join(wandb.run.dir, f"critic_net_{save_count}.pkl"))
-			wandb.save(f"critic_net_{save_count}.pkl")
+			print("Model Checkpoint")
+			# policy.actor.save(os.path.join(wandb.run.dir, f"actor_net_{save_count}.pkl"))
+			path = f"actor_net_{save_count}.pkl"
+			with open(path, "wb") as file: 
+				pickle.dump(policy.actor, file)
+			
+			artifact = wandb.Artifact('model', type='model')
+			artifact.add_file(path)
+			run.log_artifact(artifact)
+
+			path = f"critic_net_{save_count}.pkl"
+			with open(path, "wb") as file: 
+				pickle.dump(policy.critic, file)
+			# policy.critic.save(os.path.join(wandb.run.dir, f"critic_net_{save_count}.pkl"))
+				
+			artifact = wandb.Artifact('model', type='model')
+			artifact.add_file(path)
+			run.log_artifact(artifact)
+			
 			save_count += 1
 
 
