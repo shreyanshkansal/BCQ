@@ -88,7 +88,10 @@ def interact_with_environment(env, state_dim, action_dim, max_action, device, ar
 
 
 # Trains BCQ offline
-def train_BCQ(state_dim, action_dim, max_action, device, args):
+def train_BCQ(state_dim, action_dim, max_action, device, args, env=None):
+
+	data = env.get_dataset()
+
 	# For saving files
 	setting = f"{args.env}_{args.seed}"
 	buffer_name = f"{args.buffer_name}_{setting}"
@@ -115,7 +118,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args):
 	save_count = 0
 	
 	while training_iters < args.max_timesteps: 
-		pol_vals = policy.train(0, iterations=int(args.eval_freq), batch_size=args.batch_size)
+		pol_vals = policy.train(0, iterations=int(args.eval_freq), batch_size=args.batch_size, data=data)
 		avg_reward = eval_policy(policy, args.env, args.seed)
 		evaluations.append(avg_reward)
 		run.log({"avg_reward" : avg_reward})
@@ -172,7 +175,8 @@ def eval_policy(policy, env_name, seed, eval_episodes=10):
 if __name__ == "__main__":
 	
 	parser = argparse.ArgumentParser()
-	parser.add_argument("--env", default="Hopper-v3")               # OpenAI gym environment name
+	parser.add_argument("--env", default="Hopper")               # OpenAI gym environment name
+	parser.add_argument("--dataset", default="expert")               # OpenAI gym environment name
 	parser.add_argument("--seed", default=0, type=int)              # Sets Gym, PyTorch and Numpy seeds
 	parser.add_argument("--buffer_name", default="Robust")          # Prepends name to filename
 	parser.add_argument("--eval_freq", default=5e3, type=float)     # How often (time steps) we evaluate
@@ -210,8 +214,48 @@ if __name__ == "__main__":
 
 	if not os.path.exists("./buffers"):
 		os.makedirs("./buffers")
+	
+	env_name = args.env
+	dataset = args.dataset
+	
+	if env_name == 'HalfCheetah':
+		if dataset == 'expert':
+			path = {"env": "halfcheetah-expert-v2"}
+		elif dataset == 'medexp':
+			path = {"env": "halfcheetah-medium-expert-v2"}
+		elif dataset == 'medium':
+			path = {"env": "halfcheetah-medium-v2"}
+		elif dataset == 'medrep':
+			path = {"env": "halfcheetah-medium-replay-v2"}
+	elif env_name == 'Walker2d':
+		if dataset == 'expert':
+			path = {"env": "walker2d-expert-v2"}
+		elif dataset == 'medexp':
+			path = {"env": "walker2d-medium-expert-v2"}
+		elif dataset == 'medium':
+			path = {"env": "walker2d-medium-v2"}
+		elif dataset == 'medrep':
+			path = {"env": "walker2d-medium-replay-v2"}
+	elif env_name == 'Hopper':
+		if dataset == 'expert':
+			path = {"env": "hopper-expert-v2"}
+		elif dataset == 'medexp':
+			path = {"env": "hopper-medium-expert-v2"}
+		elif dataset == 'medium':
+			path = {"env": "hopper-medium-v2"}
+		elif dataset == 'medrep':
+			path = {"env": "hopper-medium-replay-v2"}
+	elif env_name == 'Ant':
+		if dataset == 'expert':
+			path = {"env": "ant-expert-v2"}
+		elif dataset == 'medexp':
+			path = {"env": "ant-medium-expert-v2"}
+		elif dataset == 'medium':
+			path = {"env": "ant-medium-v2"}
+		elif dataset == 'medrep':
+			path = {"env": "ant-medium-replay-v2"}
 
-	env = gym.make(args.env)
+	env = gym.make(path['env'])
 
 	env.seed(args.seed)
 	env.action_space.seed(args.seed)
@@ -228,4 +272,4 @@ if __name__ == "__main__":
 		interact_with_environment(env, state_dim, action_dim, max_action, device, args)
 	else:
 		print ("blah")
-		train_BCQ(state_dim, action_dim, max_action, device, args)
+		train_BCQ(state_dim, action_dim, max_action, device, args, env=env)

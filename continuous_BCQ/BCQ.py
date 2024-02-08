@@ -135,10 +135,10 @@ class BCQ(object):
 		return action[ind].cpu().data.numpy().flatten()
 
 
-	def train(self, replay_buffer, iterations, batch_size=100):
+	def train(self, replay_buffer, iterations, batch_size=100, data=None):
 
-		env = gym.make("hopper-expert-v2")
-		data = env.get_dataset()
+		data=data
+		
 		length=len(data['observations'])
 		start=0
 		end=batch_size
