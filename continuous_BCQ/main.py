@@ -127,14 +127,14 @@ def train_BCQ(state_dim, action_dim, max_action, device, args, env=None):
 		training_iters += args.eval_freq
 		print(f"Training iterations: {training_iters}")
 
-		if training_iters%(args.max_timesteps) == 0:
+		if (training_iters//args.eval_freq)%(args.max_timesteps//(args.eval_freq*2)) == 0:
 			print("Model Checkpoint")
 			# policy.actor.save(os.path.join(wandb.run.dir, f"actor_net_{save_count}.pkl"))
 			path = f"actor_net_{save_count}.pkl"
 			with open(path, "wb") as file: 
 				pickle.dump(policy.actor, file)
 			
-			artifact = wandb.Artifact('actor_model', type='model')
+			artifact = wandb.Artifact(f'actor_model_{save_count}', type='model')
 			artifact.add_file(path)
 			run.log_artifact(artifact)
 
@@ -143,7 +143,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args, env=None):
 				pickle.dump(policy.critic, file)
 			# policy.critic.save(os.path.join(wandb.run.dir, f"critic_net_{save_count}.pkl"))
 				
-			artifact = wandb.Artifact('critic_model', type='model')
+			artifact = wandb.Artifact(f'critic_model_{save_count}', type='model')
 			artifact.add_file(path)
 			run.log_artifact(artifact)
 
