@@ -135,7 +135,7 @@ class BCQ(object):
 		return action[ind].cpu().data.numpy().flatten()
 
 
-	def train(self, replay_buffer, iterations, batch_size=256, data=None):
+	def train(self, replay_buffer, iterations, batch_size=100 data=None):
 
 		data=data
 		
@@ -166,16 +166,18 @@ class BCQ(object):
 			if end>length:
 				start=0
 				end=batch_size
+
+			randar=np.random.randint(length, size=batch_size)
 			# 	data=np.transpose(data)
 			# 	np.random.shuffle(data)
 			# 	data=np.transpose(data)
 
 			state, action, next_state, reward, not_done = (
-			torch.from_numpy(data['observations'][start:end]).to(device), 
-			torch.from_numpy(data['actions'][start:end]).to(device), 
-			torch.from_numpy(data['next_observations'][start:end]).to(device),
-			torch.from_numpy(data['rewards'][start:end]).to(device), 
-			torch.from_numpy(data['terminals'][start:end]).to(device)
+			torch.from_numpy(data['observations'][randar]).to(device), 
+			torch.from_numpy(data['actions'][randar]).to(device), 
+			torch.from_numpy(data['next_observations'][randar]).to(device),
+			torch.from_numpy(data['rewards'][randar]).to(device), 
+			torch.from_numpy(data['terminals'][randar]).to(device)
 			)
 
 			
