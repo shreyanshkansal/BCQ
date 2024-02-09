@@ -92,8 +92,8 @@ def train_BCQ(state_dim, action_dim, max_action, device, args, env=None):
 
 	data = env.get_dataset()
 	#print statemnts for debugging
-	print(len(data))
-	print(data)
+	#print(len(data))
+	#print(data)
 
 	# For saving files
 	setting = f"{args.env}_{args.seed}"
