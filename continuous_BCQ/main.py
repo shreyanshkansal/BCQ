@@ -91,6 +91,9 @@ def interact_with_environment(env, state_dim, action_dim, max_action, device, ar
 def train_BCQ(state_dim, action_dim, max_action, device, args, env=None):
 
 	data = env.get_dataset()
+	#print statemnts for debugging
+	print(len(data))
+	print(data[0])
 
 	# For saving files
 	setting = f"{args.env}_{args.seed}"
