@@ -135,7 +135,7 @@ class BCQ(object):
 		return action[ind].cpu().data.numpy().flatten()
 
 
-	def train(self, replay_buffer, iterations, batch_size=100, data=None):
+	def train(self, replay_buffer, iterations, batch_size=256, data=None):
 
 		data=data
 		
