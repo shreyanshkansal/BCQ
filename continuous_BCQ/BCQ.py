@@ -167,11 +167,11 @@ class BCQ(object):
 				np.random.shuffle(data)
 				data=np.transpose(data)
 			state, action, next_state, reward, not_done = (
-			torch.from_numpy(data['observations'][start:end]).to(device), 
-			torch.from_numpy(data['actions'][start:end]).to(device), 
-			torch.from_numpy(data['next_observations'][start:end]).to(device), 
-			torch.from_numpy(data['rewards'][start:end]).to(device), 
-			torch.from_numpy(data['terminals'][start:end]).to(device)
+			torch.from_numpy(data['observations'][start%length:end%length]).to(device), 
+			torch.from_numpy(data['actions'][start%length:end%length]).to(device), 
+			torch.from_numpy(data['next_observations'][start%length:end%length]).to(device), 
+			torch.from_numpy(data['rewards'][start%length:end%length]).to(device), 
+			torch.from_numpy(data['terminals'][start%length:end%length]).to(device)
 			)
 
 			
