@@ -101,7 +101,7 @@ def train_BCQ(state_dim, action_dim, max_action, device, args, env=None):
 
 	#wandb
 	wandb.login(key = "9693e19323d20b494a26a6ee07f05881b2107bf8")
-	run = wandb.init(project="BCQRuns_medrep_medium", config=args)
+	run = wandb.init(project="BCQRuns_medexp_medium", config=args)
 	# Initialize policy
 	policy = BCQ.BCQ(state_dim, action_dim, max_action, device, args.discount, args.tau, args.lmbda, args.phi)
 
